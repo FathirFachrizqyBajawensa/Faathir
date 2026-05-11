@@ -1,1 +1,1201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking — Luminara Wedding Organizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ─── CSS VARIABLES ─────────────────────────────────── */
+    :root {
+      --dark-green : #2f4936;
+      --cream      : #f2f0e4;
+      --sage       : #b3af8c;
+      --taupe      : #9a8d7b;
+      --gold       : #c9a84c;
+      --gold-light : #e8d08a;
+      --white      : #ffffff;
+      --text-dark  : #1a2a1e;
+    }
 
+    /* ─── RESET ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      background: rgba(47, 73, 54, 0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.22);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    /* SVG LOGO — "L" + 4-point star in gold */
+    .logo-svg { width: 38px; height: 38px; flex-shrink: 0; }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.18em;
+      color: var(--gold-light);
+      line-height: 1.2;
+    }
+    .nav-brand span {
+      display: block;
+      font-size: 0.55rem;
+      letter-spacing: 0.32em;
+      color: var(--sage);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* centre nav links */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .nav-links a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage);
+      text-decoration: none;
+      padding: 6px 11px;
+      border-radius: 1px;
+      transition: color .22s, background .22s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a.active {
+      color: var(--dark-green);
+      background: var(--gold);
+      font-weight: 600;
+    }
+
+    /* separator dot between groups */
+    .nav-sep {
+      width: 3px; height: 3px;
+      background: rgba(179,175,140,0.4);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* right side: auth buttons */
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .nav-auth a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 7px 18px;
+      border-radius: 1px;
+      transition: all .22s;
+    }
+    .nav-auth .btn-login {
+      color: var(--sage);
+      border: 1px solid rgba(179,175,140,0.35);
+    }
+    .nav-auth .btn-login:hover {
+      color: var(--gold-light);
+      border-color: var(--gold);
+    }
+    .nav-auth .btn-register {
+      color: var(--dark-green);
+      background: var(--gold);
+      font-weight: 600;
+    }
+    .nav-auth .btn-register:hover {
+      background: var(--gold-light);
+    }
+
+    /* hamburger (mobile) */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--sage);
+      transition: all .25s;
+    }
+
+    /* mobile drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: 72px; left: 0; right: 0;
+      background: rgba(30, 50, 38, 0.98);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding: 20px 28px 28px;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 99;
+    }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      text-decoration: none;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(179,175,140,0.12);
+      transition: color .2s;
+    }
+    .nav-drawer a:hover, .nav-drawer a.active { color: var(--gold-light); }
+    .nav-drawer a.active { color: var(--gold); }
+    .nav-drawer-auth {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .nav-drawer-auth a {
+      border: none;
+      border-bottom: none;
+      padding: 10px 0;
+      flex: 1;
+      text-align: center;
+    }
+    .nav-drawer-auth .btn-login  { border: 1px solid rgba(179,175,140,0.35); color: var(--sage); }
+    .nav-drawer-auth .btn-register { background: var(--gold); color: var(--dark-green); font-weight: 600; }
+
+    /* ─── HERO BANNER ────────────────────────────────────── */
+    .hero {
+      margin-top: 78px;
+      position: relative;
+      height: 340px;
+      background: linear-gradient(135deg, var(--dark-green) 0%, #1e3226 60%, #162a1e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,168,76,0.07) 0%, transparent 70%);
+    }
+
+    /* decorative corner lines */
+    .hero-corner {
+      position: absolute;
+      width: 120px; height: 120px;
+      border-color: rgba(201,168,76,0.25);
+      border-style: solid;
+    }
+    .hero-corner.tl { top: 28px; left: 44px; border-width: 1px 0 0 1px; }
+    .hero-corner.tr { top: 28px; right: 44px; border-width: 1px 1px 0 0; }
+    .hero-corner.bl { bottom: 28px; left: 44px; border-width: 0 0 1px 1px; }
+    .hero-corner.br { bottom: 28px; right: 44px; border-width: 0 1px 1px 0; }
+
+    .hero-content { text-align: center; position: relative; }
+    .hero-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--cream);
+      letter-spacing: 0.08em;
+      line-height: 1.15;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: var(--sage);
+      letter-spacing: 0.12em;
+    }
+
+    /* gold divider */
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 10px auto 0;
+    }
+    .gold-divider::before, .gold-divider::after {
+      content: '';
+      width: 60px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold));
+    }
+    .gold-divider::after { background: linear-gradient(to left, transparent, var(--gold)); }
+    .gold-divider-star { color: var(--gold); font-size: 0.7rem; }
+
+    /* ─── MAIN LAYOUT ─────────────────────────────────────── */
+    .page-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* steps indicator */
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 52px;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      color: var(--sage);
+      background: var(--cream);
+      transition: all .3s;
+    }
+    .step-item.active .step-circle {
+      border-color: var(--gold);
+      color: var(--white);
+      background: var(--dark-green);
+      box-shadow: 0 0 0 4px rgba(201,168,76,0.18);
+    }
+    .step-item.done .step-circle {
+      border-color: var(--dark-green);
+      background: var(--dark-green);
+      color: var(--gold);
+    }
+    .step-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--taupe);
+      font-weight: 500;
+    }
+    .step-item.active .step-label { color: var(--dark-green); font-weight: 600; }
+    .step-connector {
+      width: 80px; height: 1px;
+      background: linear-gradient(to right, var(--sage), var(--sage));
+      margin-bottom: 20px;
+    }
+
+    /* ─── FORM CARD ──────────────────────────────────────── */
+    .form-card {
+      background: var(--white);
+      border: 1px solid rgba(154,141,123,0.2);
+      border-radius: 2px;
+      box-shadow: 0 8px 48px rgba(47,73,54,0.08), 0 2px 8px rgba(47,73,54,0.04);
+      overflow: hidden;
+    }
+
+    .form-card-header {
+      background: var(--dark-green);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .form-card-header-icon {
+      width: 40px; height: 40px;
+      border: 1px solid rgba(201,168,76,0.4);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 1rem;
+    }
+    .form-card-header h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--cream);
+      letter-spacing: 0.1em;
+    }
+    .form-card-header p {
+      font-size: 0.7rem;
+      color: var(--sage);
+      letter-spacing: 0.1em;
+      margin-top: 3px;
+    }
+
+    .form-body { padding: 44px 40px; }
+
+    /* ─── SECTION TITLE ──────────────────────────────────── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .section-title h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      color: var(--dark-green);
+      text-transform: uppercase;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--sage), transparent);
+    }
+
+    /* ─── GRID ───────────────────────────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 28px;
+      margin-bottom: 36px;
+    }
+    .form-grid.col-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-grid.col-1 { grid-template-columns: 1fr; }
+
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field.span-2 { grid-column: span 2; }
+    .field.span-3 { grid-column: span 3; }
+
+    label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--taupe);
+      font-weight: 600;
+    }
+    label .req { color: var(--gold); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      background: var(--cream);
+      border: 1px solid rgba(154,141,123,0.35);
+      border-radius: 1px;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color .25s, box-shadow .25s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--dark-green);
+      box-shadow: 0 0 0 3px rgba(47,73,54,0.08);
+    }
+    select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a8d7b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 38px; }
+    textarea { resize: vertical; min-height: 100px; }
+
+    /* ─── PACKAGE CARDS ──────────────────────────────────── */
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+
+    .package-card {
+      border: 1.5px solid rgba(154,141,123,0.3);
+      border-radius: 2px;
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: all .3s;
+      position: relative;
+      background: var(--cream);
+    }
+    .package-card:hover {
+      border-color: var(--sage);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(47,73,54,0.1);
+    }
+    .package-card.selected {
+      border-color: var(--dark-green);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(47,73,54,0.1), 0 8px 24px rgba(47,73,54,0.12);
+    }
+    .package-card input[type="radio"] { position: absolute; opacity: 0; }
+
+    .pkg-badge {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--sage);
+      padding: 3px 10px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .package-card.selected .pkg-badge { background: var(--dark-green); }
+    .pkg-badge.popular { background: var(--gold); color: var(--dark-green); }
+
+    .pkg-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: var(--dark-green);
+      margin-bottom: 8px;
+    }
+    .pkg-price {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .pkg-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .pkg-features li {
+      font-size: 0.72rem;
+      color: var(--taupe);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .pkg-features li::before { content: '✦'; color: var(--sage); font-size: 0.5rem; margin-top: 2px; flex-shrink: 0; }
+    .package-card.selected .pkg-features li::before { color: var(--gold); }
+
+    /* checkmark indicator */
+    .pkg-check {
+      position: absolute;
+      top: 12px; right: 14px;
+      width: 22px; height: 22px;
+      border: 1.5px solid var(--sage);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      color: transparent;
+      transition: all .3s;
+    }
+    .package-card.selected .pkg-check {
+      background: var(--dark-green);
+      border-color: var(--dark-green);
+      color: var(--gold);
+    }
+
+    /* ─── ADD-ONS ─────────────────────────────────────────── */
+    .addon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .addon-item {
+      border: 1.5px solid rgba(154,141,123,0.25);
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: all .25s;
+      position: relative;
+      background: var(--cream);
+    }
+    .addon-item:hover { border-color: var(--sage); }
+    .addon-item.checked { border-color: var(--dark-green); background: var(--white); }
+    .addon-item input { position: absolute; opacity: 0; }
+    .addon-icon { font-size: 1.2rem; margin-bottom: 8px; }
+    .addon-name { font-size: 0.72rem; font-weight: 600; color: var(--dark-green); letter-spacing: 0.04em; margin-bottom: 3px; }
+    .addon-price { font-size: 0.65rem; color: var(--gold); font-weight: 500; }
+    .addon-tick {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 16px; height: 16px;
+      border: 1px solid var(--sage);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem;
+      color: transparent;
+    }
+    .addon-item.checked .addon-tick { background: var(--dark-green); border-color: var(--dark-green); color: var(--gold); }
+
+    /* ─── SEPARATOR ──────────────────────────────────────── */
+    .section-sep {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--sage), transparent);
+      margin: 36px 0;
+    }
+
+    /* ─── SUMMARY PANEL ──────────────────────────────────── */
+    .summary-panel {
+      background: var(--dark-green);
+      border-radius: 2px;
+      padding: 32px 32px 28px;
+      margin-top: 36px;
+    }
+    .summary-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .summary-title::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.3); }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .summary-row:last-of-type { border-bottom: none; }
+    .summary-key { font-size: 0.7rem; color: var(--sage); letter-spacing: 0.08em; }
+    .summary-val { font-size: 0.78rem; color: var(--cream); font-weight: 500; }
+
+    .summary-total {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(201,168,76,0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .summary-total-key {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      color: var(--gold-light);
+    }
+    .summary-total-val {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+    }
+
+    /* ─── NOTE BOX ───────────────────────────────────────── */
+    .note-box {
+      margin-top: 28px;
+      padding: 16px 20px;
+      background: rgba(179,175,140,0.12);
+      border-left: 3px solid var(--sage);
+      font-size: 0.72rem;
+      color: var(--taupe);
+      line-height: 1.7;
+    }
+
+    /* ─── SUBMIT AREA ─────────────────────────────────────── */
+    .submit-area {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .btn-primary {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dark-green);
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+      border: none;
+      padding: 18px 64px;
+      cursor: pointer;
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border: 1px solid rgba(255,255,255,0.35);
+      pointer-events: none;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--gold) 0%, #b8922a 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201,168,76,0.35);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--taupe);
+      background: none;
+      border: 1px solid rgba(154,141,123,0.4);
+      padding: 13px 40px;
+      cursor: pointer;
+      transition: all .25s;
+    }
+    .btn-secondary:hover { border-color: var(--dark-green); color: var(--dark-green); }
+
+    .consent-line {
+      font-size: 0.65rem;
+      color: var(--taupe);
+      letter-spacing: 0.04em;
+      text-align: center;
+      line-height: 1.7;
+      max-width: 500px;
+    }
+    .consent-line a { color: var(--dark-green); text-decoration: underline; }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      background: var(--dark-green);
+      padding: 28px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-copy {
+      font-size: 0.65rem;
+      color: var(--sage);
+      letter-spacing: 0.12em;
+    }
+    .footer-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      color: var(--gold-light);
+      letter-spacing: 0.2em;
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content { animation: fadeUp .8s ease both; }
+    .form-card    { animation: fadeUp .8s .15s ease both; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .nav-auth  { display: none; }
+      .nav-hamburger { display: flex; }
+      .form-body { padding: 28px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid.col-3 { grid-template-columns: 1fr; }
+      .field.span-2, .field.span-3 { grid-column: span 1; }
+      .package-grid { grid-template-columns: 1fr; }
+      .addon-grid { grid-template-columns: 1fr 1fr; }
+      .form-card-header { padding: 20px; }
+      footer { flex-direction: column; gap: 10px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <!-- Luminara Logo SVG -->
+    <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Letter L shape -->
+      <path d="M18 10 L18 80 L70 80 L70 68 L30 68 L30 10 Z" fill="url(#goldGrad)"/>
+      <!-- Overlapping second L / stylised -->
+      <path d="M32 22 L32 88 L82 88 L82 76 L44 76 L44 22 Z" fill="url(#goldGrad2)" opacity="0.75"/>
+      <!-- 4-point star -->
+      <path d="M54 18 C54 18 56 36 62 42 C68 48 82 50 82 50 C82 50 68 52 62 58 C56 64 54 82 54 82 C54 82 52 64 46 58 C40 52 26 50 26 50 C26 50 40 48 46 42 C52 36 54 18 54 18 Z" fill="url(#goldGrad3)"/>
+      <defs>
+        <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e8d08a"/>
+          <stop offset="100%" stop-color="#c9a84c"/>
+        </linearGradient>
+        <linearGradient id="goldGrad2" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c9a84c"/>
+          <stop offset="100%" stop-color="#9a7a30"/>
+        </linearGradient>
+        <linearGradient id="goldGrad3" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f2e8c0"/>
+          <stop offset="100%" stop-color="#d4a84c"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="nav-brand">
+      LUMINARA
+      <span>Wedding Organizer</span>
+    </div>
+  </a>
+
+  <!-- Centre links: 5 main pages (Registrasi & Login are in auth buttons) -->
+  <div class="nav-links">
+    <a href="beranda.html">Beranda</a>
+    <div class="nav-sep"></div>
+    <a href="paket-layanan.html">Paket Layanan</a>
+    <a href="detail-paket.html">Detail Paket</a>
+    <div class="nav-sep"></div>
+    <a href="booking.html" class="active">Booking</a>
+    <a href="tracking.html">Status Pesanan</a>
+  </div>
+
+  <!-- Right: Auth -->
+  <div class="nav-auth">
+    <a href="login.html" class="btn-login">Masuk</a>
+    <a href="registrasi.html" class="btn-register">Daftar</a>
+  </div>
+
+  <!-- Hamburger (mobile) -->
+  <button class="nav-hamburger" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="nav-drawer" id="navDrawer">
+  <a href="beranda.html">Beranda</a>
+  <a href="paket-layanan.html">Paket Layanan</a>
+  <a href="detail-paket.html">Detail Paket</a>
+  <a href="booking.html" class="active">Booking / Pemesanan</a>
+  <a href="tracking.html">Status Pesanan</a>
+  <div class="nav-drawer-auth">
+    <a href="login.html" class="btn-login">Masuk</a>
+    <a href="registrasi.html" class="btn-register">Daftar</a>
+  </div>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-corner tl"></div>
+  <div class="hero-corner tr"></div>
+  <div class="hero-corner bl"></div>
+  <div class="hero-corner br"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ Luminara Wedding Organizer ✦</p>
+    <h1 class="hero-title">Formulir Pemesanan</h1>
+    <div class="gold-divider"><span class="gold-divider-star">✦</span></div>
+    <p class="hero-sub">Wujudkan momen pernikahan impian Anda bersama kami</p>
+  </div>
+</section>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main class="page-wrapper">
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step-item active">
+      <div class="step-circle">1</div>
+      <span class="step-label">Data Diri</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item active">
+      <div class="step-circle">2</div>
+      <span class="step-label">Pilih Paket</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item">
+      <div class="step-circle">3</div>
+      <span class="step-label">Konfirmasi</span>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="form-card">
+
+    <!-- Card Header -->
+    <div class="form-card-header">
+      <div class="form-card-header-icon">✦</div>
+      <div>
+        <h2>Detail Pemesanan</h2>
+        <p>Mohon isi seluruh data dengan benar dan lengkap</p>
+      </div>
+    </div>
+
+    <div class="form-body">
+      <form id="bookingForm" onsubmit="handleSubmit(event)" novalidate>
+
+        <!-- ── SECTION 1: DATA CALON PENGANTIN ── -->
+        <div class="section-title"><h3>Data Calon Pengantin</h3></div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Nama Pengantin Pria <span class="req">*</span></label>
+            <input type="text" id="groomName" placeholder="Contoh: Budi Santoso" required/>
+          </div>
+          <div class="field">
+            <label>Nama Pengantin Wanita <span class="req">*</span></label>
+            <input type="text" id="brideName" placeholder="Contoh: Siti Rahayu" required/>
+          </div>
+          <div class="field">
+            <label>Nomor WhatsApp <span class="req">*</span></label>
+            <input type="tel" id="phone" placeholder="08xxxxxxxxxx" required/>
+          </div>
+          <div class="field">
+            <label>Alamat Email <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="email@domain.com" required/>
+          </div>
+          <div class="field span-2">
+            <label>Alamat Lengkap</label>
+            <input type="text" id="address" placeholder="Jalan, Kelurahan, Kecamatan, Kota"/>
+          </div>
+        </div>
+
+        <div class="section-sep"></div>
+
+        <!-- ── SECTION 2: DETAIL ACARA ── -->
+        <div class="section-title"><h3>Detail Acara Pernikahan</h3></div>
+
+        <div class="form-grid col-3">
+          <div class="field">
+            <label>Tanggal Akad <span class="req">*</span></label>
+            <input type="date" id="akadDate" required/>
+          </div>
+          <div class="field">
+            <label>Tanggal Resepsi <span class="req">*</span></label>
+            <input type="date" id="resepsiDate" required/>
+          </div>
+          <div class="field">
+            <label>Perkiraan Tamu <span class="req">*</span></label>
+            <input type="number" id="guests" placeholder="Jumlah orang" min="50" required/>
+          </div>
+          <div class="field">
+            <label>Kota / Lokasi Acara <span class="req">*</span></label>
+            <input type="text" id="city" placeholder="Contoh: Surabaya" required/>
+          </div>
+          <div class="field">
+            <label>Nama Gedung / Venue</label>
+            <input type="text" id="venue" placeholder="Jika sudah ada"/>
+          </div>
+          <div class="field">
+            <label>Tema Pernikahan</label>
+            <select id="theme">
+              <option value="">— Pilih Tema —</option>
+              <option>Elegant Classic</option>
+              <option>Rustic Garden</option>
+              <option>Modern Minimalist</option>
+              <option>Javanese Traditional</option>
+              <option>Bohemian</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+          <div class="field span-3">
+            <label>Permintaan atau Catatan Khusus</label>
+            <textarea id="notes" placeholder="Tuliskan keinginan, preferensi warna, atau hal-hal khusus yang ingin Anda sampaikan kepada tim kami…"></textarea>
+          </div>
+        </div>
+
+        <div class="section-sep"></div>
+
+        <!-- ── SECTION 3: PILIH PAKET ── -->
+        <div class="section-title"><h3>Pilih Paket Layanan</h3></div>
+
+        <div class="package-grid">
+
+          <!-- SILVER -->
+          <label class="package-card" id="pkg-silver" onclick="selectPackage('silver',8500000)">
+            <input type="radio" name="package" value="silver"/>
+            <div class="pkg-check" id="check-silver">✓</div>
+            <span class="pkg-badge">Silver</span>
+            <div class="pkg-name">Intimate</div>
+            <div class="pkg-price">Rp 8.500.000</div>
+            <ul class="pkg-features">
+              <li>Konsultasi & perencanaan (3 sesi)</li>
+              <li>Koordinator di hari H</li>
+              <li>Dekorasi pelaminan standar</li>
+              <li>Dokumentasi foto (4 jam)</li>
+              <li>MC pernikahan</li>
+            </ul>
+          </label>
+
+          <!-- GOLD (popular) -->
+          <label class="package-card selected" id="pkg-gold" onclick="selectPackage('gold',18500000)">
+            <input type="radio" name="package" value="gold" checked/>
+            <div class="pkg-check" id="check-gold">✓</div>
+            <span class="pkg-badge popular">★ Terpopuler</span>
+            <div class="pkg-name">Luminous</div>
+            <div class="pkg-price">Rp 18.500.000</div>
+            <ul class="pkg-features">
+              <li>Konsultasi & perencanaan (8 sesi)</li>
+              <li>Koordinator penuh (akad + resepsi)</li>
+              <li>Dekorasi premium + bunga segar</li>
+              <li>Foto + video sinematik (8 jam)</li>
+              <li>Catering tasting & koordinasi</li>
+              <li>Undangan digital + fisik (100 pcs)</li>
+            </ul>
+          </label>
+
+          <!-- PLATINUM -->
+          <label class="package-card" id="pkg-platinum" onclick="selectPackage('platinum',35000000)">
+            <input type="radio" name="package" value="platinum"/>
+            <div class="pkg-check" id="check-platinum">✓</div>
+            <span class="pkg-badge" style="background:var(--taupe)">Platinum</span>
+            <div class="pkg-name">Grand Luminara</div>
+            <div class="pkg-price">Rp 35.000.000</div>
+            <ul class="pkg-features">
+              <li>Full wedding planning (tak terbatas)</li>
+              <li>Tim koordinator dedicated</li>
+              <li>Dekorasi eksklusif custom design</li>
+              <li>Foto + video full day (2 fotografer)</li>
+              <li>Wedding planner VIP concierge</li>
+              <li>Live music entertainment</li>
+              <li>Honeymoon arrangement</li>
+            </ul>
+          </label>
+
+        </div>
+
+        <!-- ── SECTION 4: ADD-ONS ── -->
+        <div class="section-title"><h3>Layanan Tambahan</h3></div>
+
+        <div class="addon-grid">
+          <label class="addon-item" onclick="toggleAddon(this, 1500000)">
+            <input type="checkbox" name="addon" value="photo-booth"/>
+            <div class="addon-tick" id="">✓</div>
+            <div class="addon-icon">📸</div>
+            <div class="addon-name">Photo Booth</div>
+            <div class="addon-price">+ Rp 1.500.000</div>
+          </label>
+          <label class="addon-item" onclick="toggleAddon(this, 2500000)">
+            <input type="checkbox" name="addon" value="live-music"/>
+            <div class="addon-tick">✓</div>
+            <div class="addon-icon">🎶</div>
+            <div class="addon-name">Live Music</div>
+            <div class="addon-price">+ Rp 2.500.000</div>
+          </label>
+          <label class="addon-item" onclick="toggleAddon(this, 800000)">
+            <input type="checkbox" name="addon" value="angpao"/>
+            <div class="addon-tick">✓</div>
+            <div class="addon-icon">🎁</div>
+            <div class="addon-name">Souvenir Tamu</div>
+            <div class="addon-price">+ Rp 800.000</div>
+          </label>
+          <label class="addon-item" onclick="toggleAddon(this, 3000000)">
+            <input type="checkbox" name="addon" value="drone"/>
+            <div class="addon-tick">✓</div>
+            <div class="addon-icon">🚁</div>
+            <div class="addon-name">Aerial Drone</div>
+            <div class="addon-price">+ Rp 3.000.000</div>
+          </label>
+          <label class="addon-item" onclick="toggleAddon(this, 1200000)">
+            <input type="checkbox" name="addon" value="pagar-ayu"/>
+            <div class="addon-tick">✓</div>
+            <div class="addon-icon">💐</div>
+            <div class="addon-name">Pagar Ayu/Bagus</div>
+            <div class="addon-price">+ Rp 1.200.000</div>
+          </label>
+          <label class="addon-item" onclick="toggleAddon(this, 4500000)">
+            <input type="checkbox" name="addon" value="catering"/>
+            <div class="addon-tick">✓</div>
+            <div class="addon-icon">🍽️</div>
+            <div class="addon-name">Catering Premium</div>
+            <div class="addon-price">+ Rp 4.500.000</div>
+          </label>
+          <label class="addon-item" onclick="toggleAddon(this, 900000)">
+            <input type="checkbox" name="addon" value="undangan"/>
+            <div class="addon-tick">✓</div>
+            <div class="addon-icon">💌</div>
+            <div class="addon-name">Undangan Eksklusif</div>
+            <div class="addon-price">+ Rp 900.000</div>
+          </label>
+          <label class="addon-item" onclick="toggleAddon(this, 2000000)">
+            <input type="checkbox" name="addon" value="makeup"/>
+            <div class="addon-tick">✓</div>
+            <div class="addon-icon">💄</div>
+            <div class="addon-name">MUA Profesional</div>
+            <div class="addon-price">+ Rp 2.000.000</div>
+          </label>
+        </div>
+
+        <!-- ── SUMMARY ── -->
+        <div class="summary-panel">
+          <div class="summary-title">Ringkasan Pesanan</div>
+          <div class="summary-row">
+            <span class="summary-key">Paket Dipilih</span>
+            <span class="summary-val" id="sum-package">Luminous (Gold)</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Harga Paket</span>
+            <span class="summary-val" id="sum-pkg-price">Rp 18.500.000</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Layanan Tambahan</span>
+            <span class="summary-val" id="sum-addons">Rp 0</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Uang Muka (DP 30%)</span>
+            <span class="summary-val" id="sum-dp">Rp 5.550.000</span>
+          </div>
+          <div class="summary-total">
+            <span class="summary-total-key">Total Estimasi</span>
+            <span class="summary-total-val" id="sum-total">Rp 18.500.000</span>
+          </div>
+        </div>
+
+        <!-- Note -->
+        <div class="note-box">
+          ⚠️ <strong>Catatan:</strong> Harga di atas adalah estimasi awal. Total akhir akan dikonfirmasi setelah konsultasi dengan tim kami. Pemesanan baru akan diproses setelah pembayaran uang muka (DP) sebesar 30% diterima. Slot tanggal bersifat terbatas — amankan tanggal Anda sekarang!
+        </div>
+
+        <!-- ── SUBMIT ── -->
+        <div class="submit-area">
+          <button type="submit" class="btn-primary">Kirim Pemesanan ✦</button>
+          <button type="reset" class="btn-secondary" onclick="resetForm()">Reset Formulir</button>
+          <p class="consent-line">
+            Dengan mengirimkan formulir ini, Anda menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi</a> Luminara Wedding Organizer. Data Anda terlindungi dan tidak akan dibagikan kepada pihak ketiga.
+          </p>
+        </div>
+
+      </form>
+    </div><!-- /form-body -->
+  </div><!-- /form-card -->
+
+</main>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <span class="footer-copy">© 2024 Luminara Wedding Organizer. All Rights Reserved.</span>
+  <span class="footer-brand">LUMINARA</span>
+  <span class="footer-copy">Dibuat dengan ♡ untuk momen terbaik Anda</span>
+</footer>
+
+<!-- ═══════════ SCRIPT ═══════════ -->
+<script>
+  /* ── Package Selection ── */
+  let pkgPrice = 18500000;
+  let addonTotal = 0;
+  const pkgNames = {
+    silver:   'Intimate (Silver)',
+    gold:     'Luminous (Gold)',
+    platinum: 'Grand Luminara (Platinum)'
+  };
+  const pkgPrices = { silver: 8500000, gold: 18500000, platinum: 35000000 };
+
+  function selectPackage(id, price) {
+    ['silver','gold','platinum'].forEach(p => {
+      document.getElementById('pkg-'+p).classList.remove('selected');
+    });
+    document.getElementById('pkg-'+id).classList.add('selected');
+    pkgPrice = price;
+    document.getElementById('sum-package').textContent = pkgNames[id];
+    updateSummary();
+  }
+
+  /* ── Add-on Toggle ── */
+  function toggleAddon(el, price) {
+    el.classList.toggle('checked');
+    if (el.classList.contains('checked')) {
+      addonTotal += price;
+    } else {
+      addonTotal -= price;
+    }
+    updateSummary();
+  }
+
+  /* ── Summary Update ── */
+  function fmt(n) {
+    return 'Rp ' + n.toLocaleString('id-ID');
+  }
+
+  function updateSummary() {
+    const total = pkgPrice + addonTotal;
+    const dp = Math.round(total * 0.3);
+    document.getElementById('sum-pkg-price').textContent = fmt(pkgPrice);
+    document.getElementById('sum-addons').textContent = fmt(addonTotal);
+    document.getElementById('sum-dp').textContent = fmt(dp);
+    document.getElementById('sum-total').textContent = fmt(total);
+  }
+
+  /* ── Form Submit ── */
+  function handleSubmit(e) {
+    e.preventDefault();
+    const required = ['groomName','brideName','phone','email','akadDate','resepsiDate','guests','city'];
+    let valid = true;
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.style.borderColor = '#c0392b';
+        valid = false;
+      } else {
+        el.style.borderColor = '';
+      }
+    });
+    if (!valid) {
+      alert('Mohon lengkapi semua field yang wajib diisi (ditandai *).');
+      return;
+    }
+    // Success mock
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `position:fixed;inset:0;background:rgba(47,73,54,0.92);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeUp .4s ease`;
+    overlay.innerHTML = `
+      <div style="background:#f2f0e4;padding:48px 56px;text-align:center;max-width:480px;border:1px solid #c9a84c;">
+        <div style="font-size:2.5rem;margin-bottom:18px;">✦</div>
+        <h2 style="font-family:'Cinzel',serif;color:#2f4936;font-size:1.4rem;letter-spacing:.1em;margin-bottom:12px;">Pemesanan Terkirim!</h2>
+        <p style="font-family:'Montserrat',sans-serif;font-size:.78rem;color:#9a8d7b;line-height:1.8;margin-bottom:28px;">
+          Terima kasih telah mempercayakan hari istimewa Anda kepada <strong>Luminara Wedding Organizer</strong>.<br/>
+          Tim kami akan menghubungi Anda dalam 1×24 jam untuk konfirmasi.
+        </p>
+        <button onclick="this.parentElement.parentElement.remove()" style="font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.25em;color:#2f4936;background:linear-gradient(135deg,#e8d08a,#c9a84c);border:none;padding:14px 40px;cursor:pointer;">Tutup ✦</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  function resetForm() {
+    selectPackage('gold', 18500000);
+    addonTotal = 0;
+    document.querySelectorAll('.addon-item').forEach(el => el.classList.remove('checked'));
+    updateSummary();
+  }
+
+  // Init
+  updateSummary();
+
+  // Mobile drawer
+  function toggleDrawer() {
+    document.getElementById('navDrawer').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
